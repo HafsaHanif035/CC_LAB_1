@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Q3_CC_LABmid_035
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void GeneratePasswordButton_Click(object sender, EventArgs e)
+        {
+            string firstName = FirstNameTextBox.Text;
+            string lastName = LastNameTextBox.Text;
+            string regNumber = RegNumberTextBox.Text;
+
+            // Check if input fields are not empty
+            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) || string.IsNullOrWhiteSpace(regNumber))
+            {
+                MessageBox.Show("Please provide your first name, last name, and registration number.");
+                return;
+            }
+
+            // Check if the registration number is in the correct format (e.g., FA20-bcs-035)
+            if (!regNumber.EndsWith("-035"))
+            {
+                MessageBox.Show("Invalid registration number format. It should end with '-035'.");
+                return;
+            }
+
+            // Generate the password based on the specified rules
+            string password = GeneratePassword(firstName, lastName, regNumber);
+
+            // Display the generated password
+            PasswordTextBox.Text = password;
+        }
+
+        private string GeneratePassword(string firstName, string lastName, string regNumber)
+        {
+            // Generate random numbers for special characters and remaining digits
+            Random random = new Random();
+
+            // Initialize a StringBuilder to build the password
+            StringBuilder passwordBuilder = new StringBuilder();
+
+            // Add the initials of the first and last name in uppercase
+            passwordBuilder.Append(firstName[0]);
+            passwordBuilder.Append(lastName[0]);
+
+            // Add 2 random special characters
+            for (int i = 0; i < 2; i++)
+            {
+                char specialChar = (char)random.Next(33, 48);
+                passwordBuilder.Append(specialChar);
+            }
+
+            // Add the last two digits of the registration number (assuming the format is FA20-bcs-035)
+            passwordBuilder.Append(regNumber[regNumber.Length - 3]);
+            passwordBuilder.Append(regNumber[regNumber.Length - 2]);
+
+            // Add 4 random numbers
+            for (int i = 0; i < 4; i++)
+            {
+                int randomNumber = random.Next(0, 10);
+                passwordBuilder.Append(randomNumber);
+            }
+
+            // Ensure the password length does not exceed 20 characters
+            int maxLength = Math.Min(20, passwordBuilder.Length);
+            return passwordBuilder.ToString(0, maxLength);
+        }
+    }
+
+  
+    }
+
+
