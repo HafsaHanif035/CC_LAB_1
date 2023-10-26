@@ -1,1 +1,81 @@
+Code Q2:
+using System;
+using System.Collections.Generic;
+
+class LL1Parser
+{
+    private List<string> tokens;
+    private int index;
+
+    public LL1Parser(List<string> tokens)
+    {
+        this.tokens = tokens;
+        this.index = 0;
+    }
+
+    public void ParseList()
+    {
+        ParseItem();
+        ParseRest();
+    }
+
+    public void ParseRest()
+    {
+        if (index < tokens.Count && tokens[index] == ",")
+        {
+            Match(",");
+            ParseItem();
+            ParseRest();
+        }
+        // ε (empty) case
+    }
+
+    public void ParseItem()
+    {
+        if (index < tokens.Count && (tokens[index] == "id" || tokens[index] == "num" || tokens[index] == "string"))
+        {
+            Match(tokens[index]);
+        }
+        else
+        {
+            // Handle syntax error or recovery logic here.
+            Console.WriteLine("Syntax error: Expected 'id', 'num', or 'string', but got '" + tokens[index] + "'");
+            // You can add additional error handling or recovery mechanisms here.
+        }
+    }
+
+    private void Match(string expectedToken)
+    {
+        if (index < tokens.Count && tokens[index] == expectedToken)
+        {
+            index++;
+        }
+        else
+        {
+            // Handle syntax error or recovery logic here.
+            Console.WriteLine("Syntax error: Expected '" + expectedToken + "', but got '" + tokens[index] + "'");
+            // You can add additional error handling or recovery mechanisms here.
+        }
+    }
+
+    public static void Main(string[] args)
+    {
+        // Example input tokens
+        List<string> inputTokens = new List<string> { "id", ",", "num", ",", "string" };
+
+        LL1Parser parser = new LL1Parser(inputTokens);
+        parser.ParseList();
+
+        if (parser.index == inputTokens.Count)
+        {
+            Console.WriteLine("Parsing successful.");
+        }
+        else
+        {
+            Console.WriteLine("Parsing failed.");
+        }
+    }
+}
+
+
 
