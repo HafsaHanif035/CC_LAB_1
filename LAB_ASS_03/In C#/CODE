@@ -1,0 +1,89 @@
+using System;
+
+class Program
+{
+    static int count = 0;
+    static string expr;
+
+    static void Main(string[] args)
+    {
+        expr = Console.ReadLine();
+        int l = expr.Length;
+        expr += "$";
+        E();
+        if (l == count)
+            Console.WriteLine("Accepted");
+        else
+            Console.WriteLine("Rejected");
+    }
+
+    static void E()
+    {
+        T();
+        Ed();
+    }
+
+    static void Ed()
+    {
+        if (count < expr.Length && (expr[count] == '+' || expr[count] == '-' || expr[count] == '*' || expr[count] == '/'))
+        {
+            Console.Write(expr[count]);
+            count++;
+            T();
+            Ed();
+        }
+        else
+        {
+            // E'->null
+        }
+    }
+
+    static void T()
+    {
+        F();
+        Td();
+    }
+
+    static void Td()
+    {
+        if (count < expr.Length && (expr[count] == '*' || expr[count] == '/'))
+        {
+            Console.Write(expr[count]);
+            count++;
+            F();
+            Td();
+        }
+        else
+        {
+            // T'->null
+        }
+    }
+
+    static void F()
+    {
+        if (count < expr.Length && (Char.IsLetterOrDigit(expr[count]) || expr[count] == '('))
+        {
+            if (expr[count] == '(')
+            {
+                count++;
+                E();
+                if (count < expr.Length && expr[count] != ')')
+                {
+                    Console.WriteLine("Rejected");
+                    Environment.Exit(0);
+                }
+                count++;
+            }
+            else
+            {
+                Console.Write(expr[count]);
+                count++;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Rejected");
+            Environment.Exit(0);
+        }
+    }
+}
